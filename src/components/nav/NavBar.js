@@ -9,15 +9,16 @@ export const NavBar = (props) => {
     <ul className="navbar">
       <li className="navbar__item">
         {/* <button onClick={() => history.push("/games")}>Games</button> */}
-        {/* <Link to={"/games"}>Games</Link> */}
-        Nav 1
+        <Link to={"/games"}>Games</Link>
       </li>
       <li className="navbar__item">
         {/* <button onClick={() => history.push("/events")}>Events</button> */}
-        {/* <Link to={"/events"}>Events</Link> */}
-        Nav 2
+        <Link to={"/"}>Events</Link>
       </li>
-      <li className="navbar__item">Profile</li>
+      <li className="navbar__item">
+        {/* <button onClick={() => history.push("/events")}>Events</button> */}
+        <Link to={"/"}>Profile</Link>
+      </li>
       {localStorage.getItem("gr_token") !== null ? (
         <li className="nav-item">
           <button
