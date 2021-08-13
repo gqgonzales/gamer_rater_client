@@ -1,12 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { GameContext } from "./GameProvider";
+import { ReviewContext } from "../review/ReviewProvider";
 import "./game.css";
 
 export const GameDetail = () => {
   const { getGameById } = useContext(GameContext);
+  const { getReviewsByGameId } = useContext(ReviewContext);
+
   const [game, setGame] = useState({});
   const [categories, setCategories] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
   const { game_id } = useParams();
   const history = useHistory();
 
@@ -17,6 +22,12 @@ export const GameDetail = () => {
   useEffect(() => {
     setCategories(game.categories);
   }, [game]);
+
+  useEffect(() => {
+    getReviewsByGameId(game_id).then((game) => {
+      setReviews(game);
+    });
+  }, [game_id]);
 
   return (
     <>
@@ -44,6 +55,21 @@ export const GameDetail = () => {
             <div key={`category-id-${category.id}`}>– {category.label}</div>
           ))}
         </div>
+        <br></br>
+        <div>Reviews: </div>
+        <div className="reviews-ternary">
+          {reviews.length > 0
+            ? reviews?.map((review) => (
+                <div key={`category-id-${review.id}`}>– {review.title}</div>
+              ))
+            : "– No reviews yet! Why don't you write one?"}
+        </div>
+        <button
+          className="btn"
+          onClick={() => history.push(`/games/${game_id}/review`)}
+        >
+          Review Game
+        </button>
         <button className="btn" onClick={() => history.push("/games")}>
           Return to List
         </button>
