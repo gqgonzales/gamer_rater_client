@@ -7,7 +7,8 @@ import { CategoryContext } from "../category/CategoryProvider.js";
 export const GameForm = () => {
   const history = useHistory();
   const { game_id } = useParams();
-  const { createGame, getGameById, editGame } = useContext(GameContext);
+  const { createGame, getGameById, editGame, deleteGame } =
+    useContext(GameContext);
   const { getCategories, categories } = useContext(CategoryContext);
 
   /*
@@ -179,7 +180,7 @@ export const GameForm = () => {
           <select
             name="categories"
             required
-            autoFocus
+            // autoFocus
             className="form-control"
             value={currentGame.categories}
             onChange={handleControlledInputChange}
@@ -196,6 +197,14 @@ export const GameForm = () => {
       {/* -------------- BUTTONS -------------- */}
       {game_id ? (
         <>
+          <button
+            className="btn-delete"
+            onClick={() => {
+              deleteGame(game_id).then(history.push("/games"));
+            }}
+          >
+            DELETE GAME
+          </button>
           <button
             type="submit"
             onClick={(evt) => {

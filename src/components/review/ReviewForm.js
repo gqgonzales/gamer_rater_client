@@ -77,11 +77,16 @@ export const ReviewForm = () => {
             player: localStorage.getItem("gr_token"),
           };
 
-          createReview(review).then(() => history.push("/games"));
+          createReview(review).then(() =>
+            history.push(`/games/${game_id}/detail`)
+          );
         }}
         className="btn btn-primary btn-2"
       >
         Save review!
+      </button>
+      <button className="btn" onClick={() => history.push("/games")}>
+        Return to List
       </button>
     </form>
   );

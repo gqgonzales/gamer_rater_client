@@ -3,7 +3,21 @@
   margin: 1px;
 }
 
-.btn {
-  border: 2px dashed teal;
+.btn,
+.btn-delete {
+  /* border: 2px dashed teal; */
   padding: 2px;
+  margin: 0.25rem;
+}
+
+.btn:hover {
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background-color: red;
+  color: white;
+  cursor: crosshair;
 }

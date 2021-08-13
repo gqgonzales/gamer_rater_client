@@ -23,8 +23,7 @@ export const RatingProvider = (props) => {
         Authorization: `Token ${localStorage.getItem("gr_token")}`,
       },
       body: JSON.stringify(ratingObj),
-    });
-    // .then(getRatings);
+    }).then(getRatings);
     // .then();
   };
 

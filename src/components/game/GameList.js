@@ -7,6 +7,8 @@ import "./game.css";
 export const GameList = (props) => {
   const { games, getGames } = useContext(GameContext);
   const history = useHistory();
+  let test = true;
+  const loggedInUser = localStorage.getItem("lu_token");
 
   useEffect(() => {
     getGames();
@@ -39,14 +41,17 @@ export const GameList = (props) => {
               <div className="game__duration">
                 Estimated game time: {game.duration}
               </div>
-              <div className="game__edit">
-                <button
-                  className="btn btn-3"
-                  onClick={() => history.push(`/games/${game.id}/edit`)}
-                >
-                  Edit Game
-                </button>
-              </div>
+              {test ? (
+                <div className="game__edit">
+                  <button
+                    className="btn btn-3"
+                    onClick={() => history.push(`/games/${game.id}/edit`)}
+                  >
+                    Edit Game
+                  </button>
+                </div>
+              ) : null}
+
               {/* -------------- REVIEW BUTTON --------------*/}
               <button
                 className="btn"

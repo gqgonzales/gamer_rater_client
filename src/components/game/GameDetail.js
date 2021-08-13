@@ -20,7 +20,6 @@ export const GameDetail = () => {
     rating: 0,
     game: game_id,
   });
-  const [averageRating, setAverageRating] = useState([]);
 
   useEffect(() => {
     getGameById(game_id).then((game) => setGame(game));
@@ -40,9 +39,9 @@ export const GameDetail = () => {
     getRatingsByGameId(game_id);
   }, [game_id]);
 
-  useEffect(() => {
-    getGameById(game_id).then((game) => setGame(game));
-  }, [averageRating]);
+  // useEffect(() => {
+  //   getGameById(game_id).then((game) => setGame(game));
+  // }, [averageRating]);
 
   const handleControlledInputChange = (event) => {
     const ratingState = { ...rating };
@@ -107,11 +106,15 @@ export const GameDetail = () => {
         <br></br>
         <div>Reviews: </div>
         <div className="reviews-ternary">
-          {reviews.length > 0
-            ? reviews?.map((review) => (
-                <div key={`category-id-${review.id}`}>– {review.title}</div>
-              ))
-            : "– No reviews yet! Why don't you write one?"}
+          {reviews.length > 0 ? (
+            reviews?.map((review) => (
+              <div key={`category-id-${review.id}`}>– {review.title}</div>
+            ))
+          ) : (
+            <div className="reviews-none">
+              No reviews yet! Why don't you write one?
+            </div>
+          )}
         </div>
         <button
           className="btn"
