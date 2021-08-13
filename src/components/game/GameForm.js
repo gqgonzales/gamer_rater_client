@@ -2,12 +2,13 @@ import React, { useContext, useState, useEffect } from "react";
 import { GameContext } from "./GameProvider.js";
 import { useHistory, useParams } from "react-router-dom";
 import "./game.css";
+import { CategoryContext } from "../category/CategoryProvider.js";
 
 export const GameForm = () => {
   const history = useHistory();
   const { game_id } = useParams();
-  const { createGame, getCategories, categories, getGameById, editGame } =
-    useContext(GameContext);
+  const { createGame, getGameById, editGame } = useContext(GameContext);
+  const { getCategories, categories } = useContext(CategoryContext);
 
   /*
         Since the input fields are bound to the values of
@@ -44,7 +45,7 @@ export const GameForm = () => {
           year_released: game.year_released,
           duration: game.duration,
           age_rec: game.age_rec,
-          categories: game.categories,
+          categories: game.categories[0].id,
         });
       });
     }
@@ -144,7 +145,7 @@ export const GameForm = () => {
       {/* -------------- DURATION --------------*/}
       <fieldset>
         <div className="form-group">
-          <label htmlFor="duration">Estimated Duration (in minutes): </label>
+          <label htmlFor="duration">Estimated Duration (per round): </label>
           <input
             type="text"
             name="duration"
@@ -184,9 +185,9 @@ export const GameForm = () => {
             onChange={handleControlledInputChange}
           >
             <option value="0">Select a Category</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.label}
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.label}
               </option>
             ))}
           </select>
@@ -194,56 +195,66 @@ export const GameForm = () => {
       </fieldset>
       {/* -------------- BUTTONS -------------- */}
       {game_id ? (
-        <button
-          type="submit"
-          onClick={(evt) => {
-            // Prevent form from being submitted
-            evt.preventDefault();
+        <>
+          <button
+            type="submit"
+            onClick={(evt) => {
+              // Prevent form from being submitted
+              evt.preventDefault();
 
-            const game = {
-              id: parseInt(game_id),
-              title: currentGame.title,
-              designer: currentGame.designer,
-              description: currentGame.description,
-              number_of_players: parseInt(currentGame.number_of_players),
-              year_released: parseInt(currentGame.year_released),
-              duration: currentGame.duration,
-              age_rec: parseInt(currentGame.age_rec),
-              categories: currentGame.categories,
-            };
+              const game = {
+                id: parseInt(game_id),
+                title: currentGame.title,
+                designer: currentGame.designer,
+                description: currentGame.description,
+                number_of_players: parseInt(currentGame.number_of_players),
+                year_released: parseInt(currentGame.year_released),
+                duration: currentGame.duration,
+                age_rec: parseInt(currentGame.age_rec),
+                categories: currentGame.categories,
+              };
 
-            // Send POST request to your API
-            editGame(game).then(() => history.push("/games"));
-          }}
-          className="btn btn-primary btn-2"
-        >
-          Save Edit
-        </button>
+              // Send POST request to your API
+              editGame(game).then(() => history.push("/games"));
+            }}
+            className="btn btn-primary btn-2"
+          >
+            Save Edit
+          </button>
+          <button className="btn" onClick={() => history.push("/games")}>
+            Return to List
+          </button>
+        </>
       ) : (
-        <button
-          type="submit"
-          onClick={(evt) => {
-            // Prevent form from being submitted
-            evt.preventDefault();
+        <>
+          <button
+            type="submit"
+            onClick={(evt) => {
+              // Prevent form from being submitted
+              evt.preventDefault();
 
-            const game = {
-              title: currentGame.title,
-              designer: currentGame.designer,
-              description: currentGame.description,
-              number_of_players: parseInt(currentGame.number_of_players),
-              year_released: parseInt(currentGame.year_released),
-              duration: currentGame.duration,
-              age_rec: parseInt(currentGame.age_rec),
-              categories: currentGame.categories,
-            };
+              const game = {
+                title: currentGame.title,
+                designer: currentGame.designer,
+                description: currentGame.description,
+                number_of_players: parseInt(currentGame.number_of_players),
+                year_released: parseInt(currentGame.year_released),
+                duration: currentGame.duration,
+                age_rec: parseInt(currentGame.age_rec),
+                categories: [currentGame.categories],
+              };
 
-            // Send POST request to your API
-            createGame(game).then(() => history.push("/games"));
-          }}
-          className="btn btn-primary btn-2"
-        >
-          Create Game
-        </button>
+              // Send POST request to your API
+              createGame(game).then(() => history.push("/games"));
+            }}
+            className="btn btn-primary btn-2"
+          >
+            Create Game
+          </button>
+          <button className="btn" onClick={() => history.push("/games")}>
+            Return to List
+          </button>
+        </>
       )}
       {/* -------------- END TERNARY -------------- */}
     </form>
