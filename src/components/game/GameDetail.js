@@ -53,20 +53,19 @@ export const GameDetail = () => {
     <>
       <div className="detail--container">
         <h2>{game.title}</h2>
-        <h4>Created by {game.designer}</h4>
+        <div>
+          Created by <b>{game.designer}</b> in <b>{game.year_released}</b>
+        </div>
         <div>{game.description}</div>
         <br></br>
         <div>
-          Year realeased: <b>{game.year_released}</b>
+          Max amount of players: <b>{game.number_of_players}</b>
         </div>
         <div>
-          Max ammount of players: <b>{game.number_of_players}</b>
+          Estimated play time: <b>{game.duration}</b>
         </div>
         <div>
-          Estimated time of play: <b>{game.duration}</b>
-        </div>
-        <div>
-          Age Recommendation: <b>{game.age_rec}</b>
+          Age Recommendation: <b>{game.age_rec}+</b>
         </div>
         <div className="game_ratings">
           Average Rating: <b>{Math.round(game.average_rating)}/10 Joysticks</b>
