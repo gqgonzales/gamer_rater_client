@@ -2,18 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { GameContext } from "./GameProvider";
 import { ReviewContext } from "../review/ReviewProvider";
+import { RatingContext } from "../rating/RatingProvider";
 import "./game.css";
 
 export const GameDetail = () => {
   const { getGameById } = useContext(GameContext);
   const { getReviewsByGameId } = useContext(ReviewContext);
+  const { createRating, getRatingsByGameId } = useContext(RatingContext);
+
+  const { game_id } = useParams();
+  const history = useHistory();
 
   const [game, setGame] = useState({});
   const [categories, setCategories] = useState([]);
   const [reviews, setReviews] = useState([]);
-
-  const { game_id } = useParams();
-  const history = useHistory();
+  const [rating, setRating] = useState({
+    rating: 0,
+    game: game_id,
+  });
+  const [averageRating, setAverageRating] = useState([]);
 
   useEffect(() => {
     getGameById(game_id).then((game) => setGame(game));
@@ -28,6 +35,20 @@ export const GameDetail = () => {
       setReviews(game);
     });
   }, [game_id]);
+
+  useEffect(() => {
+    getRatingsByGameId(game_id);
+  }, [game_id]);
+
+  useEffect(() => {
+    getGameById(game_id).then((game) => setGame(game));
+  }, [averageRating]);
+
+  const handleControlledInputChange = (event) => {
+    const ratingState = { ...rating };
+    ratingState[event.target.name] = event.target.value;
+    setRating(ratingState);
+  };
 
   return (
     <>
@@ -47,6 +68,34 @@ export const GameDetail = () => {
         </div>
         <div>
           Age Recommendation: <b>{game.age_rec}</b>
+        </div>
+        <div className="game_ratings">
+          Average Rating: <b>{Math.round(game.average_rating)}/10 Joysticks</b>
+        </div>
+        <div className="game_rating">
+          Rate This Game:
+          <input
+            type="range"
+            name="rating"
+            min="1"
+            max="10"
+            value={rating.rating}
+            onChange={handleControlledInputChange}
+          />
+          <div>{game.rating}</div>
+          <button
+            className="btn"
+            onClick={(event) => {
+              event.preventDefault();
+              createRating(rating);
+              // .then(() => {
+              //   history.push(`/games/${game_id}/detail`);
+              // });
+              window.location.reload();
+            }}
+          >
+            Save Rating
+          </button>
         </div>
         <br></br>
         <div>
